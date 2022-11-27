@@ -1,5 +1,6 @@
 import AWS = require('aws-sdk');
-const promisify = require('promisify');
+// const promisify = require('promisify');
+const Promise = require("bluebird");
 import { Context } from 'aws-lambda';
 const client = new AWS.DynamoDB.DocumentClient();
 import  { SNSClient } from "@aws-sdk/client-sns";
@@ -76,7 +77,7 @@ export const createDonationHandler = async function (event: CreateDonationEvent,
       }
 
       async function addDonation(id: string, donation: number, tableName: string, sendPhoneNumber: string, context: Context) {
-        const update = promisify(client.update).bind(client);
+        const update = Promise.promisify((client.update).bind(client));
         const donationParameters = {
           date: new Date().toISOString(),
           amount: donation
@@ -123,7 +124,6 @@ export const createDonationHandler = async function (event: CreateDonationEvent,
         try {
           const messageData = await snsClient.send(new PublishCommand(sendPhoneNumberParams));
           logInfo("Message successfully sent", context);
-          return messageData
         } catch (err) {
           logError("Error while sending sms message", context, err);
         }

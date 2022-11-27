@@ -21,7 +21,7 @@ The API includes:
 createUser(name: string, email: string) - creates a user in the store
   - POST https://DOMAIN/createUser/{name}/{email}
  
-getUser(email: string) - retrieves user information
+getUser(id: string) - retrieves user information
   - GET https://DOMAIN/getUser/{id}
 
 createDonation(email: string, donation: number) - creates and stores a donation with respect to a given user. If 2 or more donations are stored a message is sent.

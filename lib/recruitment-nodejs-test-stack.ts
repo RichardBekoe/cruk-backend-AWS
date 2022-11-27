@@ -13,6 +13,12 @@ export class RecruitmentNodejsTestStack extends cdk.Stack {
 
     const api = new apigateway.RestApi(this, "user-donations-api");
 
+    
+    const sendPhoneNumber = new cdk.CfnParameter(this, "sendPhoneNumber", {
+      type: "String",
+      description: "The phone number from which thank you messages will be sent."
+    });
+
     const createUserHandler = new NodejsFunction(this, "CreateUserHandler", {
       runtime: lambda.Runtime.NODEJS_12_X,
       handler: "createUserHandler",
@@ -35,6 +41,18 @@ export class RecruitmentNodejsTestStack extends cdk.Stack {
       }
     });
 
+    const createDonationHandler = new NodejsFunction(this, "CreateDonationHandler", {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: "createDonationHandler",
+      entry: path.join(__dirname, `/../src/lambda/createDonation.ts`),
+      memorySize: 1024,
+      environment: {
+        USERS_TABLE: userTable.table.tableName,
+        EMAIL_INDEX: userTable.emailIndexName,
+        SEND_PHONE_NUMBER: sendPhoneNumber.valueAsString
+      }
+    });
+
     const createUserIntegration = new apigateway.LambdaIntegration(createUserHandler, {
       requestTemplates: { "application/json": '{ "statusCode": "200" }' }
     });
@@ -43,11 +61,18 @@ export class RecruitmentNodejsTestStack extends cdk.Stack {
       requestTemplates: { "application/json": '{ "statusCode": "200" }' }
     });
 
+    const createDonationIntegration = new apigateway.LambdaIntegration(createDonationHandler, {
+      requestTemplates: { "application/json": '{ "statusCode": "200" }' }
+    });
+
     const createUserApi = api.root.addResource("createUser");
     createUserApi.addResource("{name}").addResource("{email}").addMethod("POST", createUserIntegration);
 
     const getUserApi = api.root.addResource("getUser");
     getUserApi.addResource("{id}").addMethod("GET", getUserIntegration);
+
+    const createDonationApi = api.root.addResource("createDonation");
+    createDonationApi.addResource("{email}").addResource("{donation}").addMethod("POST", createDonationIntegration);
 
   }
 }

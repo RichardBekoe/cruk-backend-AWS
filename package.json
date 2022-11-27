@@ -26,9 +26,11 @@
     "@aws-cdk/aws-lambda": "1.98.0",
     "@aws-cdk/aws-lambda-nodejs": "^1.97.0",
     "@aws-cdk/core": "1.97.0",
+    "@aws-sdk/client-sns": "^3.216.0",
     "@types/aws-lambda": "8.10.108",
     "@types/uuid": "^8.3.0",
     "aws-sdk": "^2.1261.0",
+    "promisfy": "^1.2.0",
     "source-map-support": "^0.5.16"
   }
 }

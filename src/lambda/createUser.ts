@@ -43,7 +43,7 @@ function validateTableNameVariable(context: Context) {
   const tableName = process.env.USERS_TABLE;
   if (!tableName) {
     const err = new TechnicalError("Error Table name");
-    logError("Error Table name", context, err);
+    logError("Error Table name undefined", context, err);
     throw err;
   }
   return { tableName };

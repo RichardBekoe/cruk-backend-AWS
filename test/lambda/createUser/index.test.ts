@@ -25,8 +25,7 @@ jest.mock('uuid', () => ({ v4: () => '123456789' }));
 
 
 import { createUserHandler } from '../../../src/lambda/createUser';
-import { ValidationError } from "../../../src/error/ValidationError";
-import { TechnicalError } from "../../../src/error/TechnicalError";
+
 
 beforeEach(() => {
   jest.clearAllMocks();

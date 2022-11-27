@@ -24,12 +24,30 @@ export class RecruitmentNodejsTestStack extends cdk.Stack {
       }
     });
 
+    const getUserHandler = new NodejsFunction(this, "GetUserHandler", {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: "getUserHandler",
+      entry: path.join(__dirname, `/../src/lambda/getUser.ts`),
+      memorySize: 1024,
+      environment: {
+        USERS_TABLE: userTable.table.tableName,
+        EMAIL_INDEX: userTable.emailIndexName
+      }
+    });
+
     const createUserIntegration = new apigateway.LambdaIntegration(createUserHandler, {
+      requestTemplates: { "application/json": '{ "statusCode": "200" }' }
+    });
+
+    const getUserIntegration = new apigateway.LambdaIntegration(getUserHandler, {
       requestTemplates: { "application/json": '{ "statusCode": "200" }' }
     });
 
     const createUserApi = api.root.addResource("createUser");
     createUserApi.addResource("{name}").addResource("{email}").addMethod("POST", createUserIntegration);
+
+    const getUserApi = api.root.addResource("getUser");
+    getUserApi.addResource("{id}").addMethod("GET", getUserIntegration);
 
   }
 }

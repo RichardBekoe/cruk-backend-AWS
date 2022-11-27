@@ -1,5 +1,4 @@
 import AWS = require('aws-sdk');
-// const promisify = require('promisify');
 const Promise = require("bluebird");
 import { Context } from 'aws-lambda';
 const client = new AWS.DynamoDB.DocumentClient();
@@ -23,7 +22,7 @@ type CreateDonationEvent = {
 
 export const createDonationHandler = async function (event: CreateDonationEvent, context: Context) {
 
-    logInfo('Recieved create donation request', context, {
+    logInfo('Received create donation request', context, {
         'arguments': JSON.stringify(event.arguments),
     });
 
@@ -111,7 +110,7 @@ export const createDonationHandler = async function (event: CreateDonationEvent,
       
 
       async function sendThankYouSMS(data: AWS.DynamoDB.DocumentClient.UpdateItemOutput, sendPhoneNumber: string, context: Context) {
-        if (!data || !data.Attributes) {
+        if (!data.Attributes || !data) {
           return;
         }
       

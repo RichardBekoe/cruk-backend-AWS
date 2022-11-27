@@ -1,6 +1,6 @@
 import * as cdk from '@aws-cdk/core';
-import { UsersTable } from './ddb/users-table';
-import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
+import { UsersTable } from './db/users-table';
+import * as lambdaNodeJs from '@aws-cdk/aws-lambda-nodejs';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as apigateway from "@aws-cdk/aws-apigateway";
 import * as path from 'path';
@@ -19,8 +19,8 @@ export class RecruitmentNodejsTestStack extends cdk.Stack {
       description: "The phone number from which thank you messages will be sent."
     });
 
-    const createUserHandler = new NodejsFunction(this, "CreateUserHandler", {
-      runtime: lambda.Runtime.NODEJS_12_X,
+    const createUserHandler = new lambdaNodeJs.NodejsFunction(this, "CreateUserHandler", {
+      runtime: lambda.Runtime.NODEJS_14_X,
       handler: "createUserHandler",
       entry: path.join(__dirname, `/../src/lambda/createUser.ts`),
       memorySize: 1024,
@@ -30,8 +30,8 @@ export class RecruitmentNodejsTestStack extends cdk.Stack {
       }
     });
 
-    const getUserHandler = new NodejsFunction(this, "GetUserHandler", {
-      runtime: lambda.Runtime.NODEJS_12_X,
+    const getUserHandler = new lambdaNodeJs.NodejsFunction(this, "GetUserHandler", {
+      runtime: lambda.Runtime.NODEJS_14_X,
       handler: "getUserHandler",
       entry: path.join(__dirname, `/../src/lambda/getUser.ts`),
       memorySize: 1024,
@@ -41,8 +41,8 @@ export class RecruitmentNodejsTestStack extends cdk.Stack {
       }
     });
 
-    const createDonationHandler = new NodejsFunction(this, "CreateDonationHandler", {
-      runtime: lambda.Runtime.NODEJS_12_X,
+    const createDonationHandler = new lambdaNodeJs.NodejsFunction(this, "CreateDonationHandler", {
+      runtime: lambda.Runtime.NODEJS_14_X,
       handler: "createDonationHandler",
       entry: path.join(__dirname, `/../src/lambda/createDonation.ts`),
       memorySize: 1024,

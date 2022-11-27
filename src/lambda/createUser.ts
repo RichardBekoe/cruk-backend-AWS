@@ -17,7 +17,7 @@ type CreateUserEvent = {
 
 export const createUserHandler = async function (event: CreateUserEvent, context: Context) {
 
-  logInfo('Recieved create user request', context, {
+  logInfo('Received create user request', context, {
     'arguments': JSON.stringify(event.arguments),
   });
 
@@ -42,7 +42,7 @@ export const createUserHandler = async function (event: CreateUserEvent, context
 function validateTableNameVariable(context: Context) {
   const tableName = process.env.USERS_TABLE;
   if (!tableName) {
-    const err = new TechnicalError("Error Table name");
+    const err = new TechnicalError("Error Table name undefined");
     logError("Error Table name undefined", context, err);
     throw err;
   }
@@ -69,7 +69,7 @@ async function createUserInDatabase(name: string, email: string, tableName: stri
       body: JSON.stringify(user)
     };
   } catch (err) {
-    logError("Failed to User in DynamoDB", context, err);
+    logError("Failed to store User in DynamoDB", context, err);
     return {
       statusCode: 400,
       body: JSON.stringify(new TechnicalError(err.message))

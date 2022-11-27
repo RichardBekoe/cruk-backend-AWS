@@ -1,5 +1,12 @@
 import { mockContext } from "../../mockContext";
-jest.mock('bluebird', () => jest.fn());
+
+jest.mock('bluebird', () => {
+  return {
+    Promise: {
+      promisify: jest.fn()
+    }
+  };
+});
 
 const mockDynamoDbUpdate = jest.fn().mockImplementation(() => {
   return {
@@ -38,7 +45,7 @@ beforeEach(() => {
   process.env.EMAIL_INDEX = "emailIndexName";
   process.env.SEND_PHONE_NUMBER= "+442034698797";
 });
-
+// TODO update test
 // jest.setTimeout.Timeout - Async callback was not invoked within the 5000 ms
 describe.skip('Create Donation Tests', () => {
   test('Create donation', async () => {

@@ -16,7 +16,7 @@ type GetUserEvent = {
 
 export const getUserHandler = async function (event: GetUserEvent, context: Context) {
 
-    logInfo('Recieved get user request', context, {
+    logInfo('Received getUser request', context, {
         'arguments': JSON.stringify(event.arguments),
     });
 
@@ -62,9 +62,9 @@ function validate(id: string) {
     }
     try {
       const { Item } = await client.get(params).promise();
-      const found = Item ? true : false;
-      logInfo("User retrieved from database", context, { found: found });
-      if (!found) {
+      const isItemFound = Item ? true : false;
+      logInfo("User retrieved from database", context, { isItemFound: isItemFound });
+      if (!isItemFound) {
         throw new UserNotFoundError("Error User not found for given Id");
       }
       return Item;

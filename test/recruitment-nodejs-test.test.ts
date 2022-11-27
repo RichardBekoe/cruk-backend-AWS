@@ -13,4 +13,8 @@ describe('RecruitmentNodeJsTestStack Stack', () => {
     test('Lambdas creation', () => {
       expectCDK(stack).to(haveResource("AWS::Lambda::Function"));
     });
+
+    test('Database DynamoDB creation', () => {
+      expectCDK(stack).to(haveResource("AWS::DynamoDB::Table"));
+    });
 });
